@@ -4,10 +4,16 @@ import { CommonModule } from '@angular/common';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ShareModule } from '../share/share.module';
+import { StadisticsComponent } from '../expenses/stadistics/stadistics.component';
+import { ExpensesComponent } from '../expenses/expenses.component';
+import { DetailComponent } from '../expenses/detail/detail.component';
 
 @NgModule({
   declarations: [
-    DashboardComponent
+    DashboardComponent,
+    StadisticsComponent,
+    ExpensesComponent,
+    DetailComponent
   ],
   imports: [
     CommonModule,
@@ -16,7 +22,10 @@ import { ShareModule } from '../share/share.module';
   ],
   exports: [
     DashboardRoutingModule,
-    DashboardComponent
+    DashboardComponent,
+    StadisticsComponent,
+    ExpensesComponent,
+    DetailComponent
   ]
 })
 export class DashboardModule { }

@@ -14,12 +14,13 @@ const routes: Routes = [
     component: RegisterComponent
   },
   {
-    path: '',
-    component: DashboardComponent
+    path: 'dashboard',
+    loadChildren: 'src/app/dashboard/dashboard.module#DashboardModule',
+    component: DashboardComponent,
   },
   {
     path: '**',
-    redirectTo: ''
+    redirectTo: 'dashboard'
   }
 ];
 

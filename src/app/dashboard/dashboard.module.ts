@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ShareModule } from '../share/share.module';
@@ -18,7 +20,9 @@ import { DetailComponent } from '../expenses/detail/detail.component';
   imports: [
     CommonModule,
     DashboardRoutingModule,
-    ShareModule
+    ShareModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
   exports: [
     DashboardRoutingModule,

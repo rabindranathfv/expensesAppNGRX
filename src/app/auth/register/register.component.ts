@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { AppState } from 'src/app/app.reducer';
 
 import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -10,26 +11,31 @@ import { Store } from '@ngrx/store';
   templateUrl: './register.component.html',
   styles: []
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit, OnDestroy {
 
   public loading: boolean;
+  public subscription: Subscription;
 
   constructor( public authService: AuthService,
                public store: Store<AppState>
   ) { }
 
   ngOnInit() {
-    this.store.select('ui')
-        .subscribe( (ui) => {
-          console.log(ui);
-          this.loading = ui.isLoading;
-        });
+    this.subscription = this.store.select('ui')
+                            .subscribe( (ui) => {
+                              console.log(ui);
+                              this.loading = ui.isLoading;
+                            });
   }
 
   onSubmit(data: any) {
     // console.log(data);
     const { name, email, password } = data;
     this.authService.createUser(name, email, password);
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
 }

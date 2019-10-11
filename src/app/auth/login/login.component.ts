@@ -1,18 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { AppState } from 'src/app/app.reducer';
 
 import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styles: []
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
 
   public loading: boolean;
+  public subscription: Subscription;
 
   constructor(
     private fb: FormBuilder,
@@ -21,15 +23,19 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.store.select('ui')
-        .subscribe( (ui) => {
-          this.loading = ui.isLoading;
-        });
+    this.subscription = this.store.select('ui')
+                              .subscribe( (ui) => {
+                                this.loading = ui.isLoading;
+                              });
   }
 
   public onSubmit( data: any) {
     // console.log(data.email, data.password);
     this.authService.login(data.email, data.password);
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
 }

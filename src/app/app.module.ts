@@ -20,6 +20,8 @@ import { environment } from 'src/environments/environment';
 
 // NGRX
 import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+
 import { appReducers } from './app.reducer';
 
 // services
@@ -45,7 +47,8 @@ import { AuthGuardGuard } from './guards/auth-guard/auth-guard.guard';
     AngularFirestoreModule, // imports firebase/firestore, only needed for database features
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features,
     AngularFireStorageModule, // imports firebase/storage only needed for storage features
-    StoreModule.forRoot(appReducers)
+    StoreModule.forRoot(appReducers),
+    StoreDevtoolsModule.instrument({ maxAge: 50, logOnly: environment.production })
   ],
   providers: [
     AuthService,

@@ -1,7 +1,7 @@
 import * as fromUI from './ui.actions';
 
 export interface State {
-    isLoading: Boolean;
+    isLoading: boolean;
 }
 
 const initState: State = {

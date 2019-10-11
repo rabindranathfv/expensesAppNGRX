@@ -8,7 +8,12 @@ import { map } from 'rxjs/operators';
 
 // interfaces
 import { User } from '../../interfaces/user.interface';
+
 import { AngularFirestore } from '@angular/fire/firestore';
+
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/app.reducer';
+import { ActivateLoadingAction, DeactivateLoadingAction } from 'src/app/share/ui.actions';
 
 
 @Injectable({
@@ -18,14 +23,16 @@ export class AuthService {
 
   constructor( public afAuth: AngularFireAuth,
                private router: Router,
-               private afDB: AngularFirestore
+               private afDB: AngularFirestore,
+               private store: Store<AppState>
   ) { }
 
   public createUser( name: string, email: string, password: any) {
     console.log(name, email, password);
+    this.store.dispatch( new ActivateLoadingAction() );
     this.afAuth.auth.
-        createUserWithEmailAndPassword( email, password ).
-        then( (resp) => {
+        createUserWithEmailAndPassword( email, password )
+        .then( (resp) => {
           console.log(resp);
           const user: User = {
             uid: resp.user.uid,
@@ -36,28 +43,36 @@ export class AuthService {
               .doc(`${user.uid}`)
               .set(user)
               .then( () => {
-                this.router.navigate(['/dashobard']);
+                this.store.dispatch( new DeactivateLoadingAction() );
+                Swal.fire('Create account sucessfully', `user ${name} and email ${resp.user.email}` , 'success');
+                this.router.navigate(['/login']);
               })
               .catch( (err) => {
+                this.store.dispatch( new DeactivateLoadingAction() );
                 console.log(err);
               });
         }).
         catch( (err) => {
           console.log(err);
+          this.store.dispatch( new DeactivateLoadingAction() );
           Swal.fire('error create user account', err.message, 'error');
         });
   }
 
   public login(email, password) {
     console.log(email, password);
+    this.store.dispatch( new ActivateLoadingAction() );
     this.afAuth.auth
         .signInWithEmailAndPassword(email, password)
         .then( (resp) => {
           // console.log(resp);
+          this.store.dispatch( new DeactivateLoadingAction() );
+          Swal.fire('Login sucessfully', `Welcome ${resp.user.email}` , 'success');
           this.router.navigate(['/dashobard']);
         })
         .catch( (err) => {
           console.log(err);
+          this.store.dispatch( new DeactivateLoadingAction() );
           Swal.fire('error with your credentials', err.message, 'error');
         });
   }

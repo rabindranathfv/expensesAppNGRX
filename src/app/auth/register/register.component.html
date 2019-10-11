@@ -37,7 +37,15 @@
                         </div>
 
                         <div class="form-group">
-                            <button class="btn btn-primary submit-btn btn-block">Crear cuenta</button>
+                            <ng-container *ngIf="!loading; else elseLoading">
+                                <button [disabled]="form.invalid" class="btn btn-primary submit-btn btn-block">Crear cuenta</button>
+                            </ng-container>
+                            <ng-template #elseLoading>
+                                <button [disabled]="loading" class="btn btn-primary submit-btn btn-block">
+                                    <i class="fa fa-spin fa-sync"></i> Waiting ...
+                                </button>
+                            </ng-template>
+
                         </div>
                         <div class="text-block text-center my-3">
                             <span class="text-small font-weight-semibold">ya tienes una cuenta?</span>

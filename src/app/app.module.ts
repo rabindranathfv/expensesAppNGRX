@@ -18,6 +18,10 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { environment } from 'src/environments/environment';
 
+// NGRX
+import { StoreModule } from '@ngrx/store';
+import { appReducers } from './app.reducer';
+
 // services
 import { AuthService } from './services/auth/auth.service';
 
@@ -40,7 +44,8 @@ import { AuthGuardGuard } from './guards/auth-guard/auth-guard.guard';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule, // imports firebase/firestore, only needed for database features
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features,
-    AngularFireStorageModule // imports firebase/storage only needed for storage features
+    AngularFireStorageModule, // imports firebase/storage only needed for storage features
+    StoreModule.forRoot(appReducers)
   ],
   providers: [
     AuthService,

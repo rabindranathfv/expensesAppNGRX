@@ -28,7 +28,7 @@ export class AuthService {
   ) { }
 
   public createUser( name: string, email: string, password: any) {
-    console.log(name, email, password);
+    // console.log(name, email, password);
     this.store.dispatch( new ActivateLoadingAction() );
     this.afAuth.auth.
         createUserWithEmailAndPassword( email, password )
@@ -87,7 +87,7 @@ export class AuthService {
    */
   public isLogIn(): any {
     this.afAuth.authState.subscribe( (fireUser: firebase.User) => {
-      console.log(fireUser);
+      // console.log(fireUser);
     });
   }
 

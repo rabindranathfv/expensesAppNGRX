@@ -21,6 +21,10 @@ import { environment } from 'src/environments/environment';
 // services
 import { AuthService } from './services/auth/auth.service';
 
+// ngrx settings
+import { StoreModule } from '@ngrx/store';
+import { appReducers } from './app.reducer';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -37,7 +41,8 @@ import { AuthService } from './services/auth/auth.service';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule, // imports firebase/firestore, only needed for database features
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features,
-    AngularFireStorageModule // imports firebase/storage only needed for storage features
+    AngularFireStorageModule, // imports firebase/storage only needed for storage features
+    StoreModule.forRoot( appReducers )
   ],
   providers: [ AuthService ],
   bootstrap: [AppComponent]

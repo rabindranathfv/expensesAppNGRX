@@ -24,7 +24,6 @@ import { AuthService } from './services/auth/auth.service';
 // ngrx settings
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-
 import { appReducers } from './app.reducer';
 
 @NgModule({

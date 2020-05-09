@@ -11,19 +11,23 @@ export class AuthService {
   constructor( public afAuth: AngularFireAuth,
                private router: Router ) { }
 
+  initAuthListener() {
+    console.log('INIT AUTH LISTENER:::');
+    this.afAuth.authState.subscribe( (authInf) => {
+      console.log('lister ang fire:::', authInf);
+      console.log( authInf ? authInf.uid : null);
+    });
+  }
+
   createUser( name: string, email: string, password: any) {
-    this.afAuth.auth.
-        createUserWithEmailAndPassword( email, password ).
-        then( (resp) => {
-          console.log(resp);
-          this.router.navigate(['/dashobard']);
-        }).
-        catch( (err) => {
-          console.log(err);
-        });
+    return this.afAuth.auth.createUserWithEmailAndPassword( email, password );
   }
 
   login( email: string, password: string ) {
     return this.afAuth.auth.signInWithEmailAndPassword( email, password);
+  }
+
+  logout() {
+    return this.afAuth.auth.signOut();
   }
 }

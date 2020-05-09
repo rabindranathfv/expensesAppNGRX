@@ -40,15 +40,17 @@ export class LoginComponent implements OnInit {
 
   login() {
     if (this.loginForm.valid) {
-      console.log(this.loginForm.value);
+      // lanzar loading
       const { email, password } = this.loginForm.value;
       this.authService.login( email, password ).
       then( (credentials) => {
         console.log(credentials);
+        // detener loading
         this.router.navigate(['/dashobard']);
       }).
       catch((err) => {
         console.log(err);
+        // larzar mensaje de error con sweet alert
       });
     }
   }

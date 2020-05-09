@@ -21,6 +21,8 @@ import { environment } from 'src/environments/environment';
 // services
 import { AuthService } from './services/auth/auth.service';
 
+import { AuthGuard } from './guard/auth-guard.service';
+
 // ngrx settings
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
@@ -46,7 +48,7 @@ import { appReducers } from './app.reducer';
     StoreModule.forRoot( appReducers ), // multi reducers configuration
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }) // add redux dev tools
   ],
-  providers: [ AuthService ],
+  providers: [ AuthService, AuthGuard ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

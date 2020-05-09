@@ -12,7 +12,6 @@ export class AuthService {
                private router: Router ) { }
 
   createUser( name: string, email: string, password: any) {
-    console.log(name, email, password);
     this.afAuth.auth.
         createUserWithEmailAndPassword( email, password ).
         then( (resp) => {
@@ -22,5 +21,9 @@ export class AuthService {
         catch( (err) => {
           console.log(err);
         });
+  }
+
+  login( email: string, password: string ) {
+    return this.afAuth.auth.signInWithEmailAndPassword( email, password);
   }
 }

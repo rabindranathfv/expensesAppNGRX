@@ -17,16 +17,17 @@ export class RegisterComponent implements OnInit {
                private fb: FormBuilder ) { }
 
   ngOnInit() {
-    this.loadRegisterForm();
+    this.createRegisterForm();
   }
 
   createUser() {
-    console.log(this.registerForm.value);
-    const { name, email, password } = this.registerForm.value;
-    this.authService.createUser(name, email, password);
+    if ( this.registerForm.valid) {
+      const { name, email, password } = this.registerForm.value;
+      this.authService.createUser(name, email, password);
+    }
   }
 
-  loadRegisterForm() {
+  createRegisterForm() {
     this.registerForm = this.fb.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],

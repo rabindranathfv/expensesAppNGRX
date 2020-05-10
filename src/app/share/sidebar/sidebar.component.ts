@@ -3,6 +3,10 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { Router } from '@angular/router';
 
+import { Store } from '@ngrx/store';
+import { AppState } from './../../app.reducer';
+import * as UI from '../ui.actions';
+
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
@@ -11,22 +15,32 @@ import { Router } from '@angular/router';
 export class SidebarComponent implements OnInit {
 
   constructor( public authService: AuthService,
-               private router: Router  ) { }
+               private router: Router,
+               private store: Store<AppState>  ) { }
 
   ngOnInit() {
   }
 
   logout() {
-    // lanzar loading
+    this.showLoading();
     this.authService.logout()
       .then( (resp) => {
-        console.log('LOGOUT:::', resp);
-        // cerrar loading
+        this.hideLoading();
         this.router.navigate(['/login']);
       })
       .catch( (err) => {
         console.log(err);
       });
+  }
+
+  // dispatchers
+
+  showLoading() {
+    this.store.dispatch( UI.showLoading() );
+  }
+
+  hideLoading() {
+    this.store.dispatch( UI.hideLoading() );
   }
 
 }

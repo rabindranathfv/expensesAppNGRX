@@ -34,7 +34,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.createLoginForm();
     this.uiSubscription$ = this.store.select('ui').subscribe( ui => {
-      console.log(ui);
       this.loading = ui.isLoading;
     });
   }

@@ -1,10 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { showLoading, hideLoading } from './../../share/ui.actions';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+
 
 // ngrx
 import { AppState } from './../../app.reducer';
 import { Store } from '@ngrx/store';
+
+import * as UI from '../../share/ui.actions';
 
 // services
 import { AuthService } from 'src/app/services/auth/auth.service';
@@ -14,10 +19,12 @@ import { AuthService } from 'src/app/services/auth/auth.service';
   templateUrl: './login.component.html',
   styles: []
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
 
   loading: boolean;
   loginForm: FormGroup;
+
+  uiSubscription$: Subscription;
 
   constructor( private store: Store<AppState>,
                private fb: FormBuilder,
@@ -26,8 +33,9 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.createLoginForm();
-    this.store.select('ui').subscribe( ui => {
+    this.uiSubscription$ = this.store.select('ui').subscribe( ui => {
       console.log(ui);
+      this.loading = ui.isLoading;
     });
   }
 
@@ -40,19 +48,33 @@ export class LoginComponent implements OnInit {
 
   login() {
     if (this.loginForm.valid) {
-      // lanzar loading
+      this.showLoading();
       const { email, password } = this.loginForm.value;
       this.authService.login( email, password ).
       then( (credentials) => {
         console.log(credentials);
-        // detener loading
+        this.hideLoading();
         this.router.navigate(['/dashobard']);
       }).
       catch((err) => {
         console.log(err);
+        this.hideLoading();
         // larzar mensaje de error con sweet alert
       });
     }
   }
 
+  ngOnDestroy() {
+    this.uiSubscription$.unsubscribe();
+  }
+
+  // dispatchers
+
+  showLoading() {
+    this.store.dispatch( UI.showLoading() );
+  }
+
+  hideLoading() {
+    this.store.dispatch( UI.hideLoading() );
+  }
 }

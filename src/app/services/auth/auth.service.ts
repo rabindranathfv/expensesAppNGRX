@@ -1,27 +1,34 @@
 import { Injectable } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
+import { User } from './../../models/user.model';
 
 import { map } from 'rxjs/operators';
 
+import { AngularFireAuth } from '@angular/fire/auth';
+import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
   constructor( public afAuth: AngularFireAuth,
-               private router: Router ) { }
+               private router: Router,
+               private afStore: AngularFirestore,
+              ) { }
 
   initAuthListener() {
     console.log('INIT AUTH LISTENER:::');
     this.afAuth.authState.subscribe( (authInf) => {
       console.log('lister ang fire:::', authInf);
-      console.log( authInf ? authInf.uid : null);
     });
   }
 
   createUser( name: string, email: string, password: any) {
-    return this.afAuth.auth.createUserWithEmailAndPassword( email, password );
+    return this.afAuth.auth.createUserWithEmailAndPassword( email, password ).
+              then( ({ user }) => {
+                const newUser = new User(  user.uid, email, password);
+                return this.afStore.collection('users').add({ ...newUser });
+              });
   }
 
   login( email: string, password: string ) {

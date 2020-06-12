@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { IncomeOutcome } from '../models/income-outcome.model';
 
+import { IncomeOutcomeService } from './../services/income-outcome/income-outcome.service';
 
 @Component({
   selector: 'app-expenses',
@@ -13,8 +14,10 @@ export class ExpensesComponent implements OnInit {
 
   incomeOutcomeForm: FormGroup;
   typeOp = 'i';
+  uidUser : any;
 
-  constructor( private fb: FormBuilder ) { }
+  constructor( private fb: FormBuilder,
+               private incomeOutcomeService: IncomeOutcomeService ) { }
 
   ngOnInit() {
     this.createIncomeOutComeForm();
@@ -37,6 +40,16 @@ export class ExpensesComponent implements OnInit {
     if (this.incomeOutcomeForm.valid) {
       console.log(this.incomeOutcomeForm.value);
     }
+    const { description, amount } = this.incomeOutcomeForm.value;
+    const incomeOutcome = new IncomeOutcome( description, amount, this.typeOp, );
+    this.incomeOutcomeService.createIncomeOutcome( incomeOutcome ).
+        then( (success) => {
+          console.log(success);
+        })
+        .catch( (err) => {
+          console.log(err.message);
+        });
+    this.incomeOutcomeForm.reset();
   }
 
   /**

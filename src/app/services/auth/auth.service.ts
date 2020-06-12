@@ -4,6 +4,7 @@ import { User } from './../../models/user.model';
 
 import { map } from 'rxjs/operators';
 
+import 'firebase/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 
@@ -18,6 +19,7 @@ import { Subscription } from 'rxjs';
 export class AuthService {
 
   user: any;
+  userKeyFB: any;
   userSubscription$: Subscription;
 
   constructor( public afAuth: AngularFireAuth,
@@ -28,14 +30,23 @@ export class AuthService {
 
   initAuthListener() {
     this.afAuth.authState.subscribe( (authInf) => {
-      console.log(authInf);
+      console.log('ANGULAR FIRE AUTH STATE::::', authInf);
       if (authInf) {
         const userRef: AngularFirestoreDocument<User> = this.afStore.doc(`users/${authInf.uid}`);
         this.userSubscription$ = this.afStore.collection('users').snapshotChanges().subscribe( user => {
+          console.log(user);
+          const usersList = user.map( u => {
+            return { uid: u.payload.doc['_document'].proto.fields.uid,
+                    userKeyFB: u.payload.doc.id
+                };
+          }).find( (u) => {
+            return u.uid.stringValue === authInf.uid;
+          });
+          this.userKeyFB = usersList.userKeyFB;
           this.user = user ? user[0].payload.doc['_document'].proto.fields : '';
         });
-        const test = { ...this.user };
-        const userInfo = new User(authInf.uid, authInf.email, test.name );
+        const newUser = { ...this.user };
+        const userInfo = new User(authInf.uid, authInf.email, newUser.name );
         this.setUser( {...userInfo });
       } else {
         this.userSubscription$.unsubscribe();
@@ -50,6 +61,10 @@ export class AuthService {
                 const newUser = new User(  user.uid, email, name);
                 return this.afStore.collection(`users`).add({ ...newUser });
               });
+  }
+
+  getallUsers() {
+    return this.afStore.collection('users').snapshotChanges();
   }
 
   login( email: string, password: string ) {

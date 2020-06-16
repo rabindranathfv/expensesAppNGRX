@@ -4,7 +4,7 @@ import * as authActions from './auth.actions';
 import { User } from '../models/user.model';
 
 export interface State {
-    user: User
+    user: User;
 }
 
 export const initialState: State = {

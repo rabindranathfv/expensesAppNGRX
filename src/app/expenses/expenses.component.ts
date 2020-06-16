@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { IncomeOutcome } from '../models/income-outcome.model';
 
 import { IncomeOutcomeService } from './../services/income-outcome/income-outcome.service';
+
+import { Subscription } from 'rxjs';
 
 // ngrx
 import { AppState } from './../app.reducer';
@@ -16,13 +18,13 @@ import * as UI from '../share/ui.actions';
   templateUrl: './expenses.component.html',
   styles: []
 })
-export class ExpensesComponent implements OnInit {
+export class ExpensesComponent implements OnInit, OnDestroy {
 
   incomeOutcomeForm: FormGroup;
   typeOp = 'i';
   uidUser: any;
-
   loading = false;
+  uiSubscription$: Subscription;
 
   constructor( private fb: FormBuilder,
                private incomeOutcomeService: IncomeOutcomeService,
@@ -39,7 +41,7 @@ export class ExpensesComponent implements OnInit {
    * getLoadingState
    */
   public getLoadingState() {
-    this.store.select('ui').subscribe( ({ isLoading }) => {
+    this.uiSubscription$ = this.store.select('ui').subscribe( ({ isLoading }) => {
       this.loading = isLoading;
     });
   }
@@ -102,6 +104,10 @@ export class ExpensesComponent implements OnInit {
 
   hideLoading() {
     this.store.dispatch( UI.hideLoading() );
+  }
+
+  ngOnDestroy() {
+    this.uiSubscription$.unsubscribe();
   }
 
 }

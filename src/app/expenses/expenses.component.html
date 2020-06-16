@@ -23,14 +23,10 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Type</label>
-                        <br>
-                        <pre>{{ typeOp }}</pre>
                         <ng-container *ngIf="typeOp !== 'i'; else elseTemplate">
                             <button type="button" class="btn btn-primary btn-block" (click)="typeOperation('i')">Outcome</button>
                         </ng-container>
                         <ng-template #elseTemplate>
-                            <p>entro else</p>
                             <button type="button" class="btn btn-info btn-block" (click)="typeOperation('o')">Income</button>
                         </ng-template>
                         
@@ -38,17 +34,18 @@
                     </div>
 
                     <hr>
-                    <button type="submit" class="btn btn-success mr-2" [disabled]="incomeOutcomeForm.invalid">
-                    <i class="fa fa-save"></i>
-                    Add
-                  </button>
 
-                    <!-- 
-                    <button disabled class="btn btn-success mr-2">
-                      <i class="fa fa-spin fa-sync"></i>
-                      Espere por favor...
-                    </button> 
-                  -->
+                    <ng-container *ngIf="!loading; else elseTemplateSubmit">
+                        <button type="submit" class="btn btn-success mr-2" [disabled]="incomeOutcomeForm.invalid">
+                            <i class="fa fa-save"></i>Add
+                        </button>
+                    </ng-container>
+                    <ng-template #elseTemplateSubmit>
+                        <button disabled class="btn btn-success mr-2">
+                            <i class="fa fa-spin fa-sync"></i>
+                            Wait please...
+                          </button> 
+                    </ng-template>
 
                     <button type="reset" class="btn btn-light">Cancel</button>
 

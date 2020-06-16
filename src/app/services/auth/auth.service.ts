@@ -34,7 +34,6 @@ export class AuthService {
       if (authInf) {
         const userRef: AngularFirestoreDocument<User> = this.afStore.doc(`users/${authInf.uid}`);
         this.userSubscription$ = this.afStore.collection('users').snapshotChanges().subscribe( user => {
-          console.log(user);
           const usersList = user.map( u => {
             return { uid: u.payload.doc['_document'].proto.fields.uid,
                     userKeyFB: u.payload.doc.id

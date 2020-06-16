@@ -4,15 +4,16 @@ import * as expensesActions from './expenses.actions';
 import { IncomeOutcome } from '../models/income-outcome.model';
 
 export interface StateExp {
-    expenses: IncomeOutcome;
+    items: IncomeOutcome[];
 }
 
 export const initialState: StateExp = {
-    expenses: null
+    items: []
 };
 
 const expensesReducer = createReducer(initialState,
-  on(expensesActions.addIncomeOutcome, (state, { expenses }) => ({ ...state, user: { ...user} })),
+  on(expensesActions.addIncomeOutcome, (state, { items } ) => ({ ...state, items: [...items]})),
+  on(expensesActions.deleteAllIncomeOutcome, state => ({ ...state, items: []}))
 );
 
 export function ExpensesReducer(state, action) {

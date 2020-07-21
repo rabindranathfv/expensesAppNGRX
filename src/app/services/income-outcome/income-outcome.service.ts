@@ -17,7 +17,6 @@ export class IncomeOutcomeService {
   createIncomeOutcome( incomeOutcome: IncomeOutcome) {
     const uid = this.authService.user.uid.stringValue;
     console.log('income DATA:::', incomeOutcome);
-    // reference to firebase key in users collection
     const userKeyFB = this.authService.userKeyFB ? this.authService.userKeyFB : '';
     return this.afStore.doc(`${uid}/income-outcome`).collection(`${uid}`)
         .add({ ...incomeOutcome} );

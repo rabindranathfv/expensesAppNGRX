@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { User } from './../../models/user.model';
 
 import { map } from 'rxjs/operators';
@@ -23,7 +22,6 @@ export class AuthService {
   userSubscription$: Subscription;
 
   constructor( public afAuth: AngularFireAuth,
-               private router: Router,
                private afStore: AngularFirestore,
                private store: Store<AppState>
               ) { }
@@ -81,7 +79,6 @@ export class AuthService {
   }
 
   // dispatchers
-
   setUser( user: User ) {
     this.store.dispatch( AuthActions.setUser( { user: {...user } } ) );
   }

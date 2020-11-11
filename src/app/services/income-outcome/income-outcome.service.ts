@@ -21,4 +21,11 @@ export class IncomeOutcomeService {
     return this.afStore.doc(`${uid}/income-outcome`).collection(`${uid}`)
         .add({ ...incomeOutcome} );
   }
+
+  getAllIIncomeOutCome() {
+    const uid = this.authService.user.uid.stringValue;
+    console.log('UUID for PRODUCTS***', uid);
+    const userKeyFB = this.authService.userKeyFB ? this.authService.userKeyFB : '';
+    return this.afStore.doc(`${uid}/income-outcome`).collection(`${uid}`).valueChanges();
+  }
 }

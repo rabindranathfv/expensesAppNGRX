@@ -26,6 +26,6 @@ export class IncomeOutcomeService {
     const uid = this.authService.user.uid.stringValue;
     console.log('UUID for PRODUCTS***', uid);
     const userKeyFB = this.authService.userKeyFB ? this.authService.userKeyFB : '';
-    return this.afStore.doc(`${uid}/income-outcome`).collection(`${uid}`).valueChanges();
+    return this.afStore.doc(`${uid}/income-outcome`).collection(`${uid}`).snapshotChanges();
   }
 }

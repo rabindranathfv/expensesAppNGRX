@@ -13,7 +13,8 @@ export const initialState: StateExp = {
 
 const expensesReducer = createReducer(initialState,
   on(expensesActions.addIncomeOutcome, (state, { items } ) => ({ ...state, items: [...items]})),
-  on(expensesActions.deleteAllIncomeOutcome, state => ({ ...state, items: []}))
+  on(expensesActions.deleteAllIncomeOutcome, state => ({ ...state, items: []})),
+  on(expensesActions.getAllIncomeOutCome, (state, { items }) => ({ ...state, items: [...items] }))
 );
 
 export function ExpensesReducer(state, action) {

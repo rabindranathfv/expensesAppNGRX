@@ -7,7 +7,6 @@ import 'firebase/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 
-
 import { Store } from '@ngrx/store';
 import { AppState } from './../../app.reducer';
 import * as AuthActions from '../../auth/auth.actions';

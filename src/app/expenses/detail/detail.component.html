@@ -7,19 +7,34 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>Descripción</th>
-                            <th>Monto</th>
-                            <th>Tipo</th>
+                            <th>Description</th>
+                            <th>Amount</th>
+                            <th>Type</th>
                             <th></th>
                         </tr>
                     </thead>
 
                     <tbody>
-                        <tr>
-                            <td>Descripción</td>
-                            <td>Monto</td>
-                            <td>Tipo</td>
-                            <td>acciones</td>
+                        <tr *ngFor="let exp of expenses" id="{{ exp.uid }}">
+                            <td>{{ exp.description}}</td>
+                            <td>{{ exp.amount }}</td>
+                            <ng-container *ngIf="expenseType(exp.type); else elseTemplate">
+                                <tr>
+                                    <p><span class="badge badge-pill badge-success">Income</span></p>
+                                </tr>
+                            </ng-container>
+                            <ng-template #elseTemplate>
+                                <tr>
+                                    <p><span class="badge badge-pill badge-danger">Outcome</span></p>
+                                </tr>
+                            </ng-template>
+                            
+                            <td></td>
+                            <td>
+                                <button type="button" id="{{ exp.uid }}" class="btn btn-danger btn-lg btn-block" (click)="deleteExpense(exp.uid)">
+                                    <i class="fa fa-trash"></i>Delete
+                                </button>
+                            </td>
                         </tr>
                     </tbody>
 

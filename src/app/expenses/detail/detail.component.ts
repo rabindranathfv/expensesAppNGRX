@@ -41,7 +41,6 @@ export class DetailComponent implements OnInit {
    * deleteExpense
    */
   public deleteExpense( uidItem ) {
-    console.log('Uid for delete', uidItem);
     this.incomeOutcomeService.deleteIncomeOutcome( uidItem )
         .then( (resp)=> {
           console.log('Delete item sucess:::', resp);

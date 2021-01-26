@@ -2,6 +2,7 @@
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.reducer';
 import { IncomeOutcome } from 'src/app/models/income-outcome.model';
+import { IncomeOutcomeService } from 'src/app/services/income-outcome/income-outcome.service';
 
 @Component({
   selector: 'app-detail',
@@ -10,9 +11,10 @@ import { IncomeOutcome } from 'src/app/models/income-outcome.model';
 })
 export class DetailComponent implements OnInit {
 
-  expenses: IncomeOutcome[] = [];;
+  expenses: IncomeOutcome[] = [];
 
-  constructor( private store: Store<AppState>) { }
+  constructor( private store: Store<AppState>,
+               private incomeOutcomeService: IncomeOutcomeService) { }
 
   ngOnInit() {
     this.getAllExpenses();
@@ -23,7 +25,7 @@ export class DetailComponent implements OnInit {
    */
   public getAllExpenses() {
     this.store.select('expenses').subscribe( (exp) => {
-      this.expenses = [...exp.items];
+      this.expenses = [...exp.items.sort( (a:any, b:any) => a.amount - b.amount)];
     });
   }
 
@@ -38,8 +40,14 @@ export class DetailComponent implements OnInit {
   /**
    * deleteExpense
    */
-  public deleteExpense( uid ) {
-    console.log('Uid for delete', uid);
+  public deleteExpense( uidItem ) {
+    console.log('Uid for delete', uidItem);
+    this.incomeOutcomeService.deleteIncomeOutcome( uidItem )
+        .then( (resp)=> {
+          console.log('Delete item sucess:::', resp);
+        }).catch( err => {
+           console.log(err.mmessage) 
+        });
   }
 
 }

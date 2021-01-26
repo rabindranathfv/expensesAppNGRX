@@ -28,4 +28,13 @@ export class IncomeOutcomeService {
     const userKeyFB = this.authService.userKeyFB ? this.authService.userKeyFB : '';
     return this.afStore.doc(`${uid}/income-outcome`).collection(`${uid}`).snapshotChanges();
   }
+
+  /**
+   * deleteIncomeOutcome
+   */
+  public deleteIncomeOutcome( uidItem: string ) {
+    const uid = this.authService.user.uid.stringValue;
+    return this.afStore.doc(`${ uid }/income-outcome/${ uid }/${ uidItem}`).delete();
+    
+  }
 }

@@ -58,7 +58,7 @@ export class StadisticsComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     setTimeout(() => {
       this.barChartMethod();
-    }, 1000);
+    }, 2000);
   }
 
   barChartMethod() {
@@ -90,6 +90,8 @@ export class StadisticsComponent implements OnInit, AfterViewInit {
         }]
       },
       options: {
+        maintainAspectRatio: true,
+        responsive: true,
         scales: {
           yAxes: [{
             ticks: {

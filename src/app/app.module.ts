@@ -28,6 +28,8 @@ import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { appReducers } from './app.reducer';
 
+// charts
+
 @NgModule({
   declarations: [
     AppComponent,

@@ -4,7 +4,6 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-
 // ngrx
 import { AppState } from './../../app.reducer';
 import { Store } from '@ngrx/store';

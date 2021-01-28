@@ -1,10 +1,17 @@
+import { showLoading, hideLoading } from './../../share/ui.actions';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
-import { AuthService } from 'src/app/services/auth/auth.service';
-import { AppState } from 'src/app/app.reducer';
-
-import { Store } from '@ngrx/store';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+
+// ngrx
+import { AppState } from './../../app.reducer';
+import { Store } from '@ngrx/store';
+
+import * as UI from '../../share/ui.actions';
+
+// services
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -13,29 +20,59 @@ import { Subscription } from 'rxjs';
 })
 export class LoginComponent implements OnInit, OnDestroy {
 
-  public loading: boolean;
-  public subscription: Subscription;
+  loading: boolean;
+  loginForm: FormGroup;
 
-  constructor(
-    private fb: FormBuilder,
-    public authService: AuthService,
-    private store: Store<AppState>
-  ) { }
+  uiSubscription$: Subscription;
+
+  constructor( private store: Store<AppState>,
+               private fb: FormBuilder,
+               private router: Router,
+               public authService: AuthService ) { }
 
   ngOnInit() {
-    this.subscription = this.store.select('ui')
-                              .subscribe( (ui) => {
-                                this.loading = ui.isLoading;
-                              });
+    this.createLoginForm();
+    this.uiSubscription$ = this.store.select('ui').subscribe( ui => {
+      this.loading = ui.isLoading;
+    });
   }
 
-  public onSubmit( data: any) {
-    // console.log(data.email, data.password);
-    this.authService.login(data.email, data.password);
+  createLoginForm() {
+    this.loginForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required],
+    });
   }
 
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+  login() {
+    if (this.loginForm.valid) {
+      this.showLoading();
+      const { email, password } = this.loginForm.value;
+      this.authService.login( email, password ).
+      then( (credentials) => {
+        console.log(credentials);
+        this.hideLoading();
+        this.router.navigate(['/dashobard']);
+      }).
+      catch((err) => {
+        console.log(err);
+        this.hideLoading();
+        // larzar mensaje de error con sweet alert
+      });
+    }
   }
 
+  ngOnDestroy() {
+    this.uiSubscription$.unsubscribe();
+  }
+
+  // dispatchers
+
+  showLoading() {
+    this.store.dispatch( UI.showLoading() );
+  }
+
+  hideLoading() {
+    this.store.dispatch( UI.hideLoading() );
+  }
 }

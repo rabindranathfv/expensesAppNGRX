@@ -1,25 +1,19 @@
-import * as fromUI from './ui.actions';
+import { createReducer, on } from '@ngrx/store';
+import * as uiActions from './ui.actions';
 
 export interface State {
     isLoading: boolean;
 }
 
-const initState: State = {
+export const initialState: State = {
     isLoading: false
-}
+};
 
-export function uiReducer( state = initState, action: fromUI.actionsUi) {
-    switch (action.type) {
-        case fromUI.ACTIVATE_LOADING:
-            return {
-                isLoading: true
-            };
-        case fromUI.DEACTIVATE_LOADING:
-            return {
-                isLoading: false
-            };
+const uiReducer = createReducer(initialState,
+  on(uiActions.showLoading, state => ({ ...state, isLoading: true })),
+  on(uiActions.hideLoading, state => ({ ...state, isLoading: false })),
+);
 
-        default:
-            return state;
-    }
+export function UIReducer(state, action) {
+  return uiReducer(state, action);
 }

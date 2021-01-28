@@ -5,6 +5,8 @@ import { RegisterComponent } from './auth/register/register.component';
 import { DashboardComponent } from './dashboard/dashboard/dashboard.component';
 import { AuthGuardGuard } from './guards/auth-guard/auth-guard.guard';
 
+import { AuthGuard } from './guard/auth-guard.service';
+
 const routes: Routes = [
   {
     path: 'login',
@@ -18,7 +20,7 @@ const routes: Routes = [
     path: 'dashboard',
     loadChildren: 'src/app/dashboard/dashboard.module#DashboardModule',
     component: DashboardComponent,
-    canActivate: [AuthGuardGuard]
+    canActivate: [ AuthGuard]
   },
   {
     path: '**',

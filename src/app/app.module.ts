@@ -27,8 +27,13 @@ import { appReducers } from './app.reducer';
 // services
 import { AuthService } from './services/auth/auth.service';
 
-// guards
-import { AuthGuardGuard } from './guards/auth-guard/auth-guard.guard';
+import { AuthGuard } from './guard/auth-guard.service';
+
+// ngrx settings
+import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { appReducers } from './app.reducer';
+
 
 @NgModule({
   declarations: [
@@ -47,13 +52,10 @@ import { AuthGuardGuard } from './guards/auth-guard/auth-guard.guard';
     AngularFirestoreModule, // imports firebase/firestore, only needed for database features
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features,
     AngularFireStorageModule, // imports firebase/storage only needed for storage features
-    StoreModule.forRoot(appReducers),
-    StoreDevtoolsModule.instrument({ maxAge: 50, logOnly: environment.production })
+    StoreModule.forRoot( appReducers ), // multi reducers configuration
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }) // add redux dev tools
   ],
-  providers: [
-    AuthService,
-    AuthGuardGuard
-  ],
+  providers: [ AuthService, AuthGuard ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

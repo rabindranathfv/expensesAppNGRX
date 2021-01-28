@@ -1,14 +1,4 @@
-import { Action } from '@ngrx/store';
+import { createAction } from '@ngrx/store';
 
-export const ACTIVATE_LOADING = '[UI Loading] Loading';
-export const DEACTIVATE_LOADING = '[UI Loading] End loading';
-
-export class ActivateLoadingAction implements Action {
-    readonly type = ACTIVATE_LOADING;
-}
-
-export class DeactivateLoadingAction implements Action {
-    readonly type = DEACTIVATE_LOADING;
-}
-
-export type actionsUi = ActivateLoadingAction | DeactivateLoadingAction;
+export const showLoading = createAction('[UI Component] Show Loading');
+export const hideLoading = createAction('[UI Component] Hide Loading');

@@ -1,14 +1,16 @@
 import { ActionReducerMap } from '@ngrx/store';
-
-import * as fromUI from './share/ui.reducer';
-import * as fromAuth from './auth/auth.reducer';
+import * as ui from './share/ui.reducer';
+import * as auth from './auth/auth.reducer';
+import * as expenses from './expenses/expenses.reducer';
 
 export interface AppState {
-    ui: fromUI.State;
-    auth: fromAuth.AuthState;
+    ui: ui.State;
+    auth: auth.State;
+    expenses: expenses.StateExp;
 }
 
 export const appReducers: ActionReducerMap<AppState> = {
-    ui: fromUI.uiReducer,
-    auth: fromAuth.authReducer
+    ui: ui.UIReducer,
+    auth: auth.AuthReducer,
+    expenses: expenses.ExpensesReducer
 };

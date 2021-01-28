@@ -22,7 +22,7 @@ import { DetailComponent } from '../expenses/detail/detail.component';
     DashboardRoutingModule,
     ShareModule,
     FormsModule,
-    ReactiveFormsModule,
+    ReactiveFormsModule
   ],
   exports: [
     DashboardRoutingModule,

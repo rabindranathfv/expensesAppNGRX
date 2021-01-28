@@ -1,10 +1,17 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { AuthService } from 'src/app/services/auth/auth.service';
-import { AppState } from 'src/app/app.reducer';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
-import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 
+// ngrx
+import { AppState } from './../../app.reducer';
+import { Store } from '@ngrx/store';
+
+import * as UI from '../../share/ui.actions';
+
+// services
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -13,29 +20,59 @@ import { Subscription } from 'rxjs';
 })
 export class RegisterComponent implements OnInit, OnDestroy {
 
-  public loading: boolean;
-  public subscription: Subscription;
+  loading: boolean;
+  registerForm: FormGroup;
+  uiSubscription$: Subscription;
 
   constructor( public authService: AuthService,
-               public store: Store<AppState>
-  ) { }
+               private fb: FormBuilder,
+               private router: Router,
+               private store: Store<AppState> ) { }
 
   ngOnInit() {
-    this.subscription = this.store.select('ui')
-                            .subscribe( (ui) => {
-                              console.log(ui);
-                              this.loading = ui.isLoading;
-                            });
+    this.createRegisterForm();
+    this.uiSubscription$ = this.store.select('ui').subscribe( (ui) => {
+      this.loading = ui.isLoading;
+    });
   }
 
-  onSubmit(data: any) {
-    // console.log(data);
-    const { name, email, password } = data;
-    this.authService.createUser(name, email, password);
+  createUser() {
+    if ( this.registerForm.valid) {
+      this.showLoading();
+      const { name, email, password } = this.registerForm.value;
+      this.authService.createUser(name, email, password).
+      then( (resp) => {
+        console.log(resp);
+        this.hideLoading();
+        this.router.navigate(['/dashobard']);
+      }).
+      catch( (err) => {
+        console.log(err);
+        this.hideLoading();
+      });
+    }
   }
 
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+  createRegisterForm() {
+    this.registerForm = this.fb.group({
+      name: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required],
+    });
+  }
+
+  ngOnDestroy() {
+    this.uiSubscription$.unsubscribe();
+  }
+
+  // dispatchers
+
+  showLoading() {
+    this.store.dispatch( UI.showLoading() );
+  }
+
+  hideLoading() {
+    this.store.dispatch( UI.hideLoading() );
   }
 
 }
